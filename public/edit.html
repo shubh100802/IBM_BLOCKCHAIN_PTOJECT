@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Edit Post</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen flex flex-col items-center font-sans">
+
+  <!-- Navbar -->
+  <nav class="w-full bg-white shadow p-4 flex justify-between items-center">
+    <h1 class="text-2xl font-bold text-blue-600">HelpMeOut</h1>
+    <div>
+      <a href="/myposts.html" class="mr-4 text-gray-700 hover:text-blue-600">My Posts</a>
+      <a href="/logout" class="text-gray-700 hover:text-blue-600">Logout</a>
+    </div>
+  </nav>
+
+  <!-- Edit Form -->
+  <div class="bg-white rounded-2xl shadow-lg p-8 mt-10 w-full max-w-lg">
+    <h2 class="text-2xl font-semibold mb-6 text-center">Edit Your Post</h2>
+
+    <form id="editForm" class="space-y-4">
+      <input type="text" id="title" placeholder="Title" required class="w-full p-2 border rounded-md" />
+
+      <select id="category" class="w-full p-2 border rounded-md">
+        <option>Donation</option>
+        <option>Lost & Found</option>
+        <option>Education</option>
+        <option>Volunteering</option>
+      </select>
+
+      <textarea id="description" placeholder="Description" required class="w-full p-2 border rounded-md"></textarea>
+
+      <input type="text" id="contact" placeholder="Contact Info" required class="w-full p-2 border rounded-md" />
+
+      <select id="type" class="w-full p-2 border rounded-md">
+        <option value="need">I need help</option>
+        <option value="offer">I want to help</option>
+      </select>
+
+      <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700">
+        Update Post
+      </button>
+    </form>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const postId = new URLSearchParams(window.location.search).get("id");
+
+      fetch(`/api/post/${postId}`)
+        .then(res => {
+          if (!res.ok) {
+            throw new Error("Post not found");
+          }
+          return res.json();
+        })
+        .then(post => {
+          document.getElementById("title").value = post.title;
+          document.getElementById("description").value = post.description;
+          document.getElementById("contact").value = post.contact;
+          document.getElementById("type").value = post.type;
+          document.getElementById("category").value = post.category;
+        })
+        .catch(err => {
+          alert("Failed to load post for editing.");
+          console.error("Error fetching post:", err);
+        });
+
+      // ✅ Wait for DOM to load before attaching event
+      document.getElementById("edit-post-form").addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const updatedPost = {
+          title: document.getElementById("title").value,
+          description: document.getElementById("description").value,
+          contact: document.getElementById("contact").value,
+          type: document.getElementById("type").value,
+          category: document.getElementById("category").value,
+        };
+
+        const res = await fetch(`/api/post/${postId}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(updatedPost),
+        });
+
+        if (res.ok) {
+          alert("Post updated successfully.");
+          window.location.href = "/myposts.html";
+        } else {
+          alert("Failed to update post.");
+        }
+      });
+    });
+
+  </script>
+
+</body>
+
+</html>

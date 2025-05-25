@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HelpMeOut - Feed</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<style>
+    .post-card {
+        border: 1px solid #ccc;
+        padding: 1rem;
+        border-radius: 10px;
+        margin-bottom: 1rem;
+        background: #f9f9f9;
+    }
+</style>
+
+<body>
+    <header class="navbar">
+        <div class="logo">Help<span>Me</span>Out</div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="login.html">Login</a>
+            <a href="register.html" class="register-btn">Register</a>
+        </div>
+    </header>
+      
+    <main class="container">
+        <h2>All Help Posts</h2>
+        <div id="post-feed" class="post-list">
+            <!-- Posts will be loaded here -->
+        </div>
+    </main>
+
+    <script>
+        // Fetch all posts from backend
+        fetch("/api/posts")
+            .then(res => res.json())
+            .then(posts => {
+                const container = document.getElementById("post-feed");
+                if (posts.length === 0) {
+                    container.innerHTML = "<p>No posts yet!</p>";
+                } else {
+                    posts.forEach(post => {
+                        const card = document.createElement("div");
+                        card.className = "post-card";
+                        card.innerHTML = `
+              <h3>${post.title}</h3>
+              <p><strong>Category:</strong> ${post.category}</p>
+              <p><strong>Type:</strong> ${post.type}</p>
+              <p>${post.description}</p>
+              <p><strong>Contact:</strong> ${post.contact}</p>
+              <p><em>Posted on: ${new Date(post.createdAt).toLocaleString()}</em></p>
+              <hr/>
+            `;
+                        container.appendChild(card);
+                    });
+                }
+            })
+            .catch(err => {
+                console.error("Error fetching posts:", err);
+            });
+    </script>
+</body>
+
+</html>

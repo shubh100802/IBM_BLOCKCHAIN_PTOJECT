@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HelpMeOut</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<style>
+    .recent-posts {
+  margin-top: 3rem;
+}
+
+.post-card {
+  background: #f3f4f6;
+  padding: 1rem;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.view-all-btn {
+  display: inline-block;
+  margin-top: 1rem;
+  text-decoration: none;
+  color: #0077cc;
+  font-weight: bold;
+}
+
+</style>
+
+<body>
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="logo">Help<span>Me</span>Out</div>
+        <div class="nav-links">
+            <a href="login.html">Login</a>
+            <a href="register.html" class="register-btn">Register</a>
+        </div>
+    </header>
+
+    <!-- Main content -->
+    <main class="container">
+        <!-- Search -->
+        <input type="text" placeholder="Search help posts..." class="search-input">
+
+        <!-- Filter Buttons -->
+        <div class="filters">
+            <button class="filter-btn active">All</button>
+            <button class="filter-btn green">Donations</button>
+            <button class="filter-btn yellow">Tutoring</button>
+            <button class="filter-btn red">Lost & Found</button>
+        </div>
+
+        <!-- Help Post Card -->
+        <div class="post-card">
+            <div class="post-image"></div>
+            <div class="post-details">
+                <h2>Need Winter Clothes</h2>
+                <p class="category">Category: Donation</p>
+                <p>Looking for warm clothes for kids aged 5–10 in the local shelter.</p>
+                <p class="contact">Contact: +91 9876543210</p>
+            </div>
+        </div>
+    </main>
+
+    <section class="recent-posts container">
+        <h2>Recent Help Posts</h2>
+        <div id="home-post-feed" class="post-list"></div>
+        <a href="feed.html" class="view-all-btn">View All Posts →</a>
+    </section>
+
+
+    <!-- Footer -->
+    <footer class="footer">
+        © 2025 HelpMeOut. Built to support the community 💙
+    </footer>
+</body>
+
+
+<script>
+    fetch("/api/posts?limit=3")
+      .then(res => res.json())
+      .then(posts => {
+        const container = document.getElementById("home-post-feed");
+        if (posts.length === 0) {
+          container.innerHTML = "<p>No posts yet!</p>";
+        } else {
+          posts.forEach(post => {
+            const div = document.createElement("div");
+            div.className = "post-card";
+            div.innerHTML = `
+              <h3>${post.title}</h3>
+              <p><strong>${post.category}</strong> • ${post.type}</p>
+              <p>${post.description.slice(0, 100)}...</p>
+              <p><strong>Contact:</strong> ${post.contact}</p>
+            `;
+            container.appendChild(div);
+          });
+        }
+      })
+      .catch(err => {
+        console.error("Error fetching posts:", err);
+      });
+  </script>
+  
+
+</html>

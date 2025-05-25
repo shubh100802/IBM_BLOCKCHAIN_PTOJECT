@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login – HelpMeOut</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+
+<body>
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="logo">Help<span>Me</span>Out</div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="register.html" class="register-btn">Register</a>
+        </div>
+    </header>
+
+    <!-- Login Form -->
+    <main class="container">
+        <div class="auth-box">
+            <h2>Login to Continue</h2>
+            <form class="auth-form" action="/login" method="POST">
+                <label>Email</label>
+                <input type="email" name= "email" placeholder="you@example.com" required />
+
+                <label>Password</label>
+                <input type="password" name="password" placeholder="Enter your password" required />
+
+                <button type="submit" class="login-btn">Login</button>
+            </form>
+            <p class="redirect-msg">
+                Don’t have an account? <a href="register.html">Register here</a>
+            </p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        © 2025 HelpMeOut. Built to support the community 💙
+    </footer>
+</body>
+
+</html>

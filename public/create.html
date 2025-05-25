@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-store" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+
+  <title>Create Help Post – HelpMeOut</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="logo">Help<span>Me</span>Out</div>
+    <nav class="nav-links">
+      <a href="/create.html">Create Post</a>
+      <a href="/myposts.html">My Posts</a>
+      <a href="/logout">Logout</a>
+    </nav>
+  </header>
+  
+
+  <!-- Post Form -->
+  <main class="container">
+    <div class="auth-box">
+      <h2>Create a Help Post</h2>
+      <form class="auth-form" action="/create-post" method="POST">
+
+        <label>Title</label>
+        <input type="text" name="title" placeholder="e.g. Need school books for 5th grade" required />
+
+        <label>Category</label>
+        <select name="category" required>
+          <option value="" disabled selected>Select category</option>
+          <option value="donation">Donation</option>
+          <option value="tutoring">Tutoring</option>
+          <option value="lost">Lost & Found</option>
+          <option value="volunteering">Volunteering</option>
+        </select>
+
+        <label>Description</label>
+        <textarea name="description" placeholder="Describe the help you need or are offering..." required></textarea>
+
+        <label>Contact Information</label>
+        <input type="text" name="contact" placeholder="Phone number or email" required />
+
+        <!-- Add this to indicate if it's a help request or offer -->
+        <label>Type</label>
+        <select name="type" required>
+          <option value="" disabled selected>Select type</option>
+          <option value="request">I need help</option>
+          <option value="offer">I want to help</option>
+        </select>
+
+        <button type="submit" class="login-btn">Submit Post</button>
+      </form>
+    </div>
+  </main>
+
+
+  <script>
+    fetch("/api/user")
+      .then(res => {
+        if (res.status === 401) {
+          window.location.href = "/login.html"; // if session is invalid, redirect
+        }
+        return res.json();
+      })
+      .then(data => {
+        const navbar = document.querySelector(".nav-links");
+        const userWelcome = document.createElement("span");
+        userWelcome.textContent = `👋 Hello, ${data.name}`;
+        userWelcome.style.marginRight = "1rem";
+        userWelcome.style.fontWeight = "bold";
+        navbar.prepend(userWelcome);
+      })
+      .catch(err => {
+        console.error("Error fetching user info:", err);
+      });
+  </script>
+
+
+
+  <!-- Footer -->
+  <footer class="footer">
+    © 2025 HelpMeOut. Built to support the community 💙
+  </footer>
+</body>
+
+</html>
